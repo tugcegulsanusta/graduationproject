@@ -18,4 +18,4 @@
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/tugcegulsanusta/graduationproject.git
-   cd graduation-portal
+   cd graduationproject

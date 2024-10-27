@@ -30,4 +30,10 @@ if option == "Add Job":
 
         # Submit butonu ile formu gönderme işlemi
         if st.form_submit_button("Submit"):
+            c.execute("INSERT INTO JobInfo VALUES (?,?,?,?,?)",(company_name, job_title, job_type, job_start_date, job_end_date))
+            conn.commit()
             st.success("Job history submitted successfully!")
+if option == "Show Job History":
+    result = c.execute("SELECT * FROM JobInfo")
+    st.write(result.fetchall())
+    conn.commit()
