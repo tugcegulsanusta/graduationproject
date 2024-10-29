@@ -9,14 +9,12 @@ if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
 def login():
-    # Eğer kullanıcı giriş yapmamışsa login formunu gösterir
     if not st.session_state.logged_in:
         with st.form("Login", clear_on_submit=True):
             email = st.text_input("Email")
             password = st.text_input("Password", type="password")
             submitted = st.form_submit_button("Login")
 
-        # Form submit edildiğinde
         if submitted:
             search_user = c.execute("SELECT * FROM Users WHERE email = ? AND password = ?", (email, password)).fetchone()
             if search_user is None:
@@ -25,7 +23,7 @@ def login():
                 st.session_state.logged_in = True
                 st.success("Logged in successfully")
                 st.session_state.role = search_user[6]
-                st.rerun()  # Sayfayı yenilemek için
+                st.rerun()
     else:
         if st.session_state.role == 'admin':
             pages = st.navigation([st.Page("pages/Admin.py")])
