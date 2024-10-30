@@ -1,21 +1,21 @@
+import sqlite3
+
 import streamlit as st
-import smtplib
 
-with st.form("Send Email", clear_on_submit=True):
-    email  = st.text_input("Email Address-From: ")
+conn = sqlite3.connect("gradPortal.sqlite3")
+c = conn.cursor()
 
-    reciever_email = st.text_input("Reciever Email-Address-To: ")
+st.header("Users")
 
-    subject = st.text_input("Subject: ")
-    message = st.text_input("Message: ")
-
-    text = f"Subject: {subject}\n\n{message}"
-    if(st.form_submit_button("Send")):
-
-        server= smtplib.SMTP("smtp.gmail.com",587)
-        server.starttls()
-        server.login(email, "**")
-
-        server.sendmail(email, reciever_email, text)
-
-        print("Email sent!")
+option = st.selectbox("Filter Users By", ["Graduation Year", "Job Type"])
+if option == "Graduation Year":
+    filter = st.text_input("Graduation Year")
+    result = c.execute("""
+        SELECT Users.email
+        FROM JobInfo
+        JOIN Users ON JobInfo.user_id = Users.user_id
+        WHERE JobInfo.Graduation_Year = ?
+    """, (filter,))
+    emails = result.fetchall()
+    for email in emails:
+        st.write(email)
